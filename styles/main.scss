@@ -1,0 +1,33 @@
+$background : linear-gradient(0deg, #000000 0%, #030027 100%);
+$cell-size : 200px;
+
+body{
+    background-image: $background;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.board {
+    display: flex;
+    flex-wrap: wrap;
+    &-cell{
+        width: $cell-size;
+        height: $cell-size;
+        text-align: center;
+        line-height: $cell-size;
+        color: purple;
+        font-size: 96px;
+        border: 5px solid purple;
+        box-sizing: border-box;
+        font-family: 'Roboto';
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+.second-player{
+    color: orange;
+}

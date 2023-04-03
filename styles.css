@@ -1,0 +1,33 @@
+body {
+  background-image: linear-gradient(0deg, #000000 0%, #030027 100%);
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  display: flex;
+  flex-wrap: wrap;
+}
+.board-cell {
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  color: purple;
+  font-size: 96px;
+  border: 5px solid purple;
+  box-sizing: border-box;
+  font-family: "Roboto";
+}
+.board-cell:hover {
+  cursor: pointer;
+}
+
+.second-player {
+  color: orange;
+}
+
+/*# sourceMappingURL=styles.css.map */
