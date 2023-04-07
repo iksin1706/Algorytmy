@@ -16,16 +16,18 @@ body {
 .board {
   display: flex;
   flex-wrap: wrap;
+  aspect-ratio: 1;
+  box-sizing: border-box;
 }
 .board-cell {
   width: 150px;
-  height: 150px;
   text-align: center;
   line-height: 150px;
   color: purple;
-  font-size: 96px;
+  font-size: 80px;
   border: 5px solid purple;
   box-sizing: border-box;
+  height: 150px;
 }
 .board-cell:hover {
   cursor: pointer;
