@@ -1,69 +1,22 @@
 class Vector2 {
 }
 class Board {
-    constructor(width, height, boardContainer) {
+    constructor(width, height) {
         this.width = width;
         this.height = height;
-        this.boardContainer = boardContainer;
         this.board = [];
-        this.boardElements = [];
         this.isFirstPlayerMove = true;
-        this.initializeBoard(width, height);
-    }
-    backToPreviouseState() {
-        this.board[this.lastMove.x][this.lastMove.y] = 0;
-    }
-    initializeBoard(width, height) {
-        boardContainer.style.width = `${this.width * 150}px`;
-        boardContainer.style.width = `${this.height * 150}px`;
-        for (let i = 0; i < height; i++) {
-            this.board[i] = [];
-            this.boardElements[i] = [];
-            for (let j = 0; j < width; j++) {
-                this.board[i].push(0);
-                const element = document.createElement("div");
-                element.classList.add('board-cell');
-                element.addEventListener('click', () => { this.move({ x: i, y: j }); });
-                boardContainer.appendChild(element);
-                this.boardElements[i].push(element);
-            }
-        }
+        this.createBoard(width, height);
     }
     move(v) {
-        if (this.isLegalMove(v)) {
-            this.board[v.x][v.y] = this.isFirstPlayerMove ? 1 : 2;
-            this.boardElements[v.x][v.y].innerHTML = 'X';
-            if (!this.isFirstPlayerMove) {
-                this.boardElements[v.x][v.y].classList.add('second-player');
-            }
-            this.isFirstPlayerMove = !this.isFirstPlayerMove;
-            console.log(this.isGameFinished());
-            if (this.isGameFinished() !== 0) {
-                this.showWinner(this.isFirstPlayerMove);
-                this.newGame();
-            }
-        }
-        if (!this.isFirstPlayerMove) {
-            let bestScore = -Infinity;
-            let bestMove;
-            this.possbileMoves().forEach(element => {
-                this.dryMove({ x: element.x, y: element.y });
-                let score = this.minimaxDepth1(false, element, 0);
-                console.log(score);
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestMove = element;
-                }
-                this.backToPreviouseState();
-            });
-            this.move(bestMove);
-        }
-    }
-    dryMove(v) {
         this.board[v.x][v.y] = this.isFirstPlayerMove ? 1 : 2;
-        this.lastMove = v;
+        this.isFirstPlayerMove = !this.isFirstPlayerMove;
     }
-    possbileMoves() {
+    resetMove(v) {
+        this.board[v.x][v.y] = 0;
+        this.isFirstPlayerMove = !this.isFirstPlayerMove;
+    }
+    possibleMoves() {
         let moves = [];
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
@@ -80,39 +33,122 @@ class Board {
         let isFinished = true;
         for (let i = 0; i < this.height; i++) {
             if (this.board[i].every(v => v !== 0)) {
-                return this.isFirstPlayerMove ? 1 : -1;
+                return true;
             }
             if (this.board.every((v) => v[i] !== 0)) {
-                return this.isFirstPlayerMove ? 1 : -1;
-                ;
+                return true;
             }
             if (this.board[i][i] === 0)
                 isFinished = false;
             //if(this.board[i][this.width-i-1]===0) return false;        
         }
         if (isFinished)
-            return this.isFirstPlayerMove ? 1 : -1;
-        ;
+            return true;
         isFinished = true;
         for (let i = 0; i < this.height; i++) {
             if (this.board[this.width - i - 1][i] === 0)
                 isFinished = false;
         }
         if (isFinished)
-            this.isFirstPlayerMove ? 1 : -1;
+            return true;
         else
-            return 0;
+            return false;
     }
-    newGame() {
-        this.isFirstPlayerMove = true;
-        for (let i = 0; i < this.width; i++) {
-            for (let j = 0; j < this.height; j++) {
-                this.board[i][j] = 0;
-                this.boardElements[i][j].innerHTML = '';
-                this.boardElements[i][j].classList.remove('second-player');
+    createBoard(width, height) {
+        this.board = new Array(width)
+            .fill(false)
+            .map(() => new Array(width).fill(0));
+    }
+}
+class Game {
+    constructor(height, width) {
+        this.height = height;
+        this.width = width;
+        this.boardElements = [];
+        this.initializeBoard(width, height);
+    }
+    move(v) {
+        if (this.board.isLegalMove(v)) {
+            this.boardElements[v.x][v.y].innerHTML = 'X';
+            if (!this.board.isFirstPlayerMove) {
+                this.boardElements[v.x][v.y].classList.add('second-player');
+            }
+            this.board.move(v);
+            if (this.board.isGameFinished()) {
+                this.showWinner(this.board.isFirstPlayerMove);
+                this.newGame();
+                return;
+            }
+            else {
             }
         }
-        console.table(this.board);
+        if (!this.board.isFirstPlayerMove) {
+            let bestMove = this.findBestMove();
+            this.move(bestMove);
+        }
+    }
+    newGame() {
+        // this.isFirstPlayerMove=true;
+        // for (let i = 0; i < this.width; i++) {
+        //     for (let j = 0; j < this.height; j++) {
+        //         this.board[i][j]=0;
+        //         this.boardElements[i][j].innerHTML='';
+        //         this.boardElements[i][j].classList.remove('second-player');
+        //     }
+        // }
+    }
+    initializeBoard(width, height) {
+        this.board = new Board(this.width, this.height);
+        boardContainer.style.width = `${this.width * 150}px`;
+        boardContainer.style.width = `${this.height * 150}px`;
+        for (let i = 0; i < height; i++) {
+            this.board[i] = [];
+            this.boardElements[i] = [];
+            for (let j = 0; j < width; j++) {
+                const element = document.createElement("div");
+                element.classList.add('board-cell');
+                element.addEventListener('click', () => { this.move({ x: i, y: j }); });
+                boardContainer.appendChild(element);
+                this.boardElements[i].push(element);
+            }
+        }
+        if (!this.board.isFirstPlayerMove)
+            this.move(this.findBestMove());
+    }
+    minimax(isMaximizing, board, depth) {
+        let results = [];
+        depth++;
+        if (board.isGameFinished()) {
+            return board.isFirstPlayerMove ? -1 : 1;
+        }
+        board.possibleMoves().forEach(move => {
+            board.move(move);
+            results.push(this.minimax(!isMaximizing, board, depth));
+            board.resetMove(move);
+        });
+        if (isMaximizing) {
+            return Math.max(...results);
+        }
+        else {
+            return Math.min(...results);
+        }
+    }
+    findBestMove() {
+        let bestScore = -Infinity;
+        let bestMove;
+        this.board.possibleMoves().forEach(element => {
+            this.board.move(element);
+            this.board[element.x][element.y] = 0;
+            let score = this.minimax(false, this.board, 0);
+            console.log(element, score);
+            this.board.resetMove(element);
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = element;
+            }
+        });
+        console.log('-----------');
+        return bestMove;
     }
     showWinner(isFirstPlayerWinner) {
         const winnerInfo = document.querySelector('.winner-info');
@@ -123,20 +159,6 @@ class Board {
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-    minimaxDepth1(isMaximizing, move, depth) {
-        let results = [];
-        this.dryMove(move);
-        let score = this.isGameFinished();
-        this.backToPreviouseState();
-        return score;
-        // if(isMaximizing) return Math.max(...results);
-        // else return Math.min(...results);
-    }
-    minimax(isMaximizing, board, depth) {
-        let results = [];
-        // if(isMaximizing) return Math.max(...results);
-        // else return Math.min(...results);
-    }
 }
 /*
 0 = empty cell
@@ -144,4 +166,4 @@ class Board {
 2 = player two
 */
 const boardContainer = document.querySelector('.board');
-const board = new Board(4, 4, boardContainer);
+let game = new Game(4, 4);
