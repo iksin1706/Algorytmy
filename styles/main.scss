@@ -6,6 +6,7 @@ $cell-size : 150px;
     margin: 0;
     padding: 0;
     font-family: 'Roboto';
+    user-select: none;
 }
 
 body{
@@ -31,13 +32,15 @@ body{
         border: 5px solid purple;
         box-sizing: border-box;
         height: $cell-size;
+        margin: 5px;
         text-shadow: rgba(172, 3, 172, 0.9) 0px 0px 50px;
         
         &:hover{
             cursor: pointer;
             background-color: rgba(128, 0, 128, 0.308);
             transition: 0.2s;
-            box-shadow: rgba(172, 3, 172, 0.438) 0px 0px 30px;
+            
+            box-shadow: rgba(172, 3, 172, 0.438) 0px 10px 50px;
             transform: translateY(-5px);
         }
     }
@@ -83,7 +86,7 @@ body{
     backdrop-filter: blur(10px);
     &-container {
         width: 500px;
-        height: 300px;
+        height: 600px;
         background-color: #303030;
         border-radius: 20px;
         box-shadow: rgba(172, 3, 172, 0.438) 0px 0px 30px;
@@ -97,6 +100,20 @@ body{
         margin-bottom: 30px;
         justify-content: center;
         display: flex;
+
+        input {
+            opacity: 0;
+            width: 0px;
+            aspect-ratio: 1;
+
+            &:checked ~ .option-true {
+                background-color: purple;
+            }
+            &:not(:checked) ~ .option-false {
+                background-color: purple;
+            }
+        }
+
         background-color: #202020;
         &-option{
             width: 200px;
@@ -112,7 +129,34 @@ body{
         }
     }
     &-label{
-        margin: 30px;
+        margin-bottom: 30px;
+    }
+    
+}
+
+.btn-start{
+    width:200px;
+    height:50px;
+    background-color: purple;
+    color: white;
+    border: none;
+    font-size: 24px;
+}
+
+.back-to-settings{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 30px;
+    transition: 0.5s;
+    scale: 0.6;
+    &:hover{
+        scale: 0.9;
+        transition: 0.5s;
+        -webkit-filter: drop-shadow(rgba(172, 3, 172, 1) 0px 0px 50px);
+        filter: drop-shadow(rgba(172, 3, 172, 1) 0px 0px 20px);
+        cursor: pointer;   
     }
 }
 

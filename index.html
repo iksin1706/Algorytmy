@@ -12,20 +12,34 @@
 </head>
 <body>
     <div class="winner-info">Winner</div>
-    <div class="settings hidden">
+    <img src="img/settings.png" class="back-to-settings"></img>
+    <div id="settings" class="settings hidden" hidden>
         <div class="settings-container">
-            <h2 class="settings-label">Who will be your enemy</h2>
-            <div class="settings-switch ai-switch">
-                
-                <div class="settings-switch-option settings-switch-option__active">Other player</div>
-                <div class="settings-switch-option">Computer</div>
-            </div>
-            <div class="settings-switch ai-switch">
-                <div class="settings-switch-option settings-switch-option__active">Other player</div>
-                <div class="settings-switch-option">Computer</div>
-            </div>
+            <h2 class="settings-label">Who is player two?</h2>
+            <label class="settings-switch ai-switch">
+                <input id="isAiPlaying" type="checkbox" checked>
+                <div class="settings-switch-option option-true">Computer</div>
+                <div class="settings-switch-option option-false" >Other player</div>
+            </label>
+            <h2 class="settings-label">Who starts?</h2>
+            <label class="settings-switch ai-switch">
+                <input id="isPlayerOneStarting" type="checkbox" checked>
+                <div class="settings-switch-option option-true">Player one</div>
+                <div class="settings-switch-option option-false" >Player two</div>
+            </label>
+            <h2 class="settings-label">Change who start on next round?</h2>
+            <label class="settings-switch ai-switch">
+                <input id="isAlternating" type="checkbox" checked>
+                <div class="settings-switch-option option-true">Yes</div>
+                <div class="settings-switch-option option-false" >No</div>
+            </label>
+
+            <button id='startGame' class="btn-start" >Start game</button>
         </div>
     </div>
+    
+
+    <h2 class="score"><span class="player-one">1</span>:<span class="player-two">2</span></h2>
     <div class="board"></div>
     
     <script type="module" src="dist/app.js"></script>

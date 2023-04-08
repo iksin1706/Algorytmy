@@ -1,19 +1,21 @@
 import { Ai } from "./ai.js";
 import { Board } from "./board.js";
+import { GameSettings } from "./GameSettings.js";
 import { Vector2 } from "./vector2.js";
 
 export class Game {
 
     board: Board;
     boardElements: HTMLElement[][] = [];
-    isPlayingAgainstAi=true;
+    isPlayerOneStarting = false;
+    public gameSettings: GameSettings;
 
-    constructor(private size:number,private boardContainerElement : HTMLElement) {
-        this.board=new Board(size);
+    constructor(private size: number, private boardContainerElement: HTMLElement) {
+        this.board = new Board(size);
         this.generateBoardView();
     }
 
-    move(v: Vector2) {
+    async move(v: Vector2) {
         if (this.board.isLegalMove(v)) {
             this.boardElements[v.x][v.y].innerHTML = 'X';
             if (!this.board.isPlayerOneTurn) {
@@ -22,29 +24,41 @@ export class Game {
             this.board.move(v)
             if (this.board.isGameOver()) {
                 this.showWinner(this.board.isPlayerOneTurn);
-                this.newGame();
+                this.newRound();
                 return;
             }
         }
-        if (!this.board.isPlayerOneTurn&&this.isPlayingAgainstAi) {
-            let bestMove = Ai.findBestMove(this.board);
+        if (!this.board.isPlayerOneTurn && this.gameSettings.isAiPlaying) {
+            let bestMove = await Ai.findBestMove(this.board);
             this.move(bestMove);
         }
     }
 
-    newGame() {
-        this.board.isPlayerOneTurn = true;
+    newGame(){
+        this.isPlayerOneStarting=this.gameSettings.isPlayerOneStarting;
+        this.clearBoard();
+    }
+
+    newRound() {
+        if (this.gameSettings.isAlternating) {
+            this.isPlayerOneStarting=!this.isPlayerOneStarting;
+        }
+        this.clearBoard()
+    }
+    async clearBoard(){
+        this.board.isPlayerOneTurn = this.isPlayerOneStarting;
+        this.board.clearBoard();
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
-                this.board.board[i][j] = 0;
                 this.boardElements[i][j].innerHTML = '';
                 this.boardElements[i][j].classList.remove('second-player');
             }
         }
+        if (this.gameSettings.isAiPlaying && !this.gameSettings.isPlayerOneStarting) this.move(await Ai.findBestMove(this.board));
     }
 
     generateBoardView() {
-        this.boardContainerElement.style.width = `${this.board.size * 150}px`;
+        this.boardContainerElement.style.width = `${(this.board.size * 160)}px`;
         for (let i = 0; i < this.board.size; i++) {
             this.board[i] = [];
             this.boardElements[i] = [];
@@ -56,15 +70,12 @@ export class Game {
                 this.boardElements[i].push(element);
             }
         }
-        if (!this.board.isPlayerOneTurn&&this.isPlayingAgainstAi) this.move(Ai.findBestMove(this.board));
     }
-
-   
 
     showWinner(isFirstPlayerWinner: boolean) {
         const winnerInfo = document.querySelector('.winner-info');
         winnerInfo.innerHTML = isFirstPlayerWinner ? 'First player won' : 'Second plyer won';
-        if(winnerInfo.classList.contains('second-player-shadow')&&isFirstPlayerWinner)winnerInfo.classList.remove('second-player-shadow');
+        if (isFirstPlayerWinner) winnerInfo.classList.remove('second-player-shadow');
         else winnerInfo.classList.add('second-player-shadow');
         winnerInfo.classList.add('winner-info-show');
         this.delay(3000).then(() => winnerInfo.classList.remove('winner-info-show'));

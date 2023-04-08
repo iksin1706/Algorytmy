@@ -63,5 +63,13 @@ export class Board {
             );
     }
 
+    clearBoard(){
+        this.board = new Array<number[]>(this.size)
+        .fill([])
+        .map(() =>
+            new Array<number>(this.size).fill(0)
+        );
+    }
+
 
 }

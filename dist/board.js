@@ -55,4 +55,9 @@ export class Board {
             .fill([])
             .map(() => new Array(size).fill(0));
     }
+    clearBoard() {
+        this.board = new Array(this.size)
+            .fill([])
+            .map(() => new Array(this.size).fill(0));
+    }
 }

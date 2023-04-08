@@ -17,7 +17,6 @@ export class Ai {
             bestValue = isMaximizing ? Math.max(bestValue, value) : Math.min(bestValue, value);
             if (isMaximizing) alpha = Math.max(alpha, bestValue);
             else beta = Math.min(beta, bestValue);
-            
             if (beta <= alpha) break;
         };
         return bestValue;
@@ -28,7 +27,7 @@ export class Ai {
         let bestMove: Vector2;
         console.log('---------------');
 
-        board.possibleMoves().forEach(move => {
+        for (let move of board.possibleMoves()){
             board.move(move);
             board[move.x][move.y] = 0;
             let score = Ai.minimax(false, board, 0, -Infinity, +Infinity);
@@ -38,7 +37,7 @@ export class Ai {
                 bestMove = move;
             }
             console.log(score, move);
-        });
+        };
         return bestMove;
     }
 }

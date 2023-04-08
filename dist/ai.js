@@ -24,7 +24,7 @@ export class Ai {
         let bestScore = -Infinity;
         let bestMove;
         console.log('---------------');
-        board.possibleMoves().forEach(move => {
+        for (let move of board.possibleMoves()) {
             board.move(move);
             board[move.x][move.y] = 0;
             let score = Ai.minimax(false, board, 0, -Infinity, +Infinity);
@@ -34,7 +34,8 @@ export class Ai {
                 bestMove = move;
             }
             console.log(score, move);
-        });
+        }
+        ;
         return bestMove;
     }
 }
