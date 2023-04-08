@@ -14,25 +14,20 @@ export class Ai {
             board.move(move);
             let value = this.minimax(!isMaximizing, board, depth, alpha, beta);
             board.undoMove(move);
-            if (isMaximizing) {
-                bestValue = Math.max(bestValue, value);
-                alpha = Math.max(alpha, bestValue);
-                if (beta <= alpha) break;
-            }
-            else {
-                bestValue = Math.min(bestValue, value);
-                beta = Math.min(beta, bestValue);
-                if (beta <= alpha) break;
-            }
+            bestValue = isMaximizing ? Math.max(bestValue, value) : Math.min(bestValue, value);
+            if (isMaximizing) alpha = Math.max(alpha, bestValue);
+            else beta = Math.min(beta, bestValue);
+            
+            if (beta <= alpha) break;
         };
         return bestValue;
     }
 
-    static findBestMove(board:Board): Vector2 {
+    static findBestMove(board: Board): Vector2 {
         let bestScore = -Infinity;
         let bestMove: Vector2;
         console.log('---------------');
-        
+
         board.possibleMoves().forEach(move => {
             board.move(move);
             board[move.x][move.y] = 0;
@@ -42,7 +37,7 @@ export class Ai {
                 bestScore = score;
                 bestMove = move;
             }
-            console.log(score,move);
+            console.log(score, move);
         });
         return bestMove;
     }

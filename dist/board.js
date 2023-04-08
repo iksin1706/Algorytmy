@@ -2,7 +2,7 @@ export class Board {
     constructor(size) {
         this.size = size;
         this.board = [];
-        this.isPlayerOneTurn = true;
+        this.isPlayerOneTurn = false;
         this.createBoard(size);
     }
     move(move) {

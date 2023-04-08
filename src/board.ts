@@ -3,7 +3,7 @@ import { Vector2 } from "./vector2";
 export class Board {
 
     board: number[][] = [];
-    isPlayerOneTurn = true;
+    isPlayerOneTurn = false;
 
     constructor(public readonly size: number) {
         this.createBoard(size);

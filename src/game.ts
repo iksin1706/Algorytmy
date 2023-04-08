@@ -64,6 +64,8 @@ export class Game {
     showWinner(isFirstPlayerWinner: boolean) {
         const winnerInfo = document.querySelector('.winner-info');
         winnerInfo.innerHTML = isFirstPlayerWinner ? 'First player won' : 'Second plyer won';
+        if(winnerInfo.classList.contains('second-player-shadow')&&isFirstPlayerWinner)winnerInfo.classList.remove('second-player-shadow');
+        else winnerInfo.classList.add('second-player-shadow');
         winnerInfo.classList.add('winner-info-show');
         this.delay(3000).then(() => winnerInfo.classList.remove('winner-info-show'));
     }

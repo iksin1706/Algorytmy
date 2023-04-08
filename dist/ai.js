@@ -9,18 +9,13 @@ export class Ai {
             board.move(move);
             let value = this.minimax(!isMaximizing, board, depth, alpha, beta);
             board.undoMove(move);
-            if (isMaximizing) {
-                bestValue = Math.max(bestValue, value);
+            bestValue = isMaximizing ? Math.max(bestValue, value) : Math.min(bestValue, value);
+            if (isMaximizing)
                 alpha = Math.max(alpha, bestValue);
-                if (beta <= alpha)
-                    break;
-            }
-            else {
-                bestValue = Math.min(bestValue, value);
+            else
                 beta = Math.min(beta, bestValue);
-                if (beta <= alpha)
-                    break;
-            }
+            if (beta <= alpha)
+                break;
         }
         ;
         return bestValue;

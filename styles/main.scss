@@ -1,6 +1,7 @@
 $background : linear-gradient(0deg, #000000 0%, #030027 100%);
 $cell-size : 150px;
 
+
 *{
     margin: 0;
     padding: 0;
@@ -30,11 +31,14 @@ body{
         border: 5px solid purple;
         box-sizing: border-box;
         height: $cell-size;
+        text-shadow: rgba(172, 3, 172, 0.9) 0px 0px 50px;
         
         &:hover{
             cursor: pointer;
             background-color: rgba(128, 0, 128, 0.308);
             transition: 0.2s;
+            box-shadow: rgba(172, 3, 172, 0.438) 0px 0px 30px;
+            transform: translateY(-5px);
         }
     }
 }
@@ -48,19 +52,71 @@ body{
     height: 100vh;
     background-color: #303030AA;
     color: white;
+    text-shadow: rgba(172, 3, 172, 0.9) 0px 0px 50px;
     text-align: center;
     line-height: 100vh;
     font-size: 96px;
     display: none;
     backdrop-filter: blur(10px);
 }
+.second-player-shadow {
+    text-shadow: rgba(255, 166, 0, 0.712) 0px 0px 50px;
+}
 
 .winner-info-show{
-    
     opacity: 0;
     display: block;
     animation: showWinner 3s ease-in-out forwards;
 }
+
+.settings{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: #303030AA;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    backdrop-filter: blur(10px);
+    &-container {
+        width: 500px;
+        height: 300px;
+        background-color: #303030;
+        border-radius: 20px;
+        box-shadow: rgba(172, 3, 172, 0.438) 0px 0px 30px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: center;
+    }
+    &-switch{
+        height: 50px;
+        margin-bottom: 30px;
+        justify-content: center;
+        display: flex;
+        background-color: #202020;
+        &-option{
+            width: 200px;
+            line-height: 50px;          
+            box-shadow: #303030 0px 0px 30px;
+            &__active{
+                background-color: purple;
+                box-shadow: purple 0px 0px 30px;
+            }
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+    &-label{
+        margin: 30px;
+    }
+}
+
+
 
 @keyframes showWinner {
     0% {        
