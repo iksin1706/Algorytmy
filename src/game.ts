@@ -15,7 +15,7 @@ export class Game {
         this.generateBoardView();
     }
 
-    async move(v: Vector2) {
+    move(v: Vector2) {
         if (this.board.isLegalMove(v)) {
             this.boardElements[v.x][v.y].innerHTML = 'X';
             if (!this.board.isPlayerOneTurn) {
@@ -24,12 +24,11 @@ export class Game {
             this.board.move(v)
             if (this.board.isGameOver()) {
                 this.showWinner(this.board.isPlayerOneTurn);
-                this.newRound();
                 return;
             }
         }
         if (!this.board.isPlayerOneTurn && this.gameSettings.isAiPlaying) {
-            let bestMove = await Ai.findBestMove(this.board);
+            let bestMove = Ai.findBestMove(this.board);
             this.move(bestMove);
         }
     }
@@ -45,7 +44,7 @@ export class Game {
         }
         this.clearBoard()
     }
-    async clearBoard(){
+    clearBoard(){
         this.board.isPlayerOneTurn = this.isPlayerOneStarting;
         this.board.clearBoard();
         for (let i = 0; i < this.size; i++) {
@@ -54,7 +53,9 @@ export class Game {
                 this.boardElements[i][j].classList.remove('second-player');
             }
         }
-        if (this.gameSettings.isAiPlaying && !this.gameSettings.isPlayerOneStarting) this.move(await Ai.findBestMove(this.board));
+        console.log(this.isPlayerOneStarting);
+        console.log(this.board.isPlayerOneTurn);
+        if (this.gameSettings.isAiPlaying && !this.isPlayerOneStarting) this.move(Ai.findBestMove(this.board));
     }
 
     generateBoardView() {
@@ -78,7 +79,11 @@ export class Game {
         if (isFirstPlayerWinner) winnerInfo.classList.remove('second-player-shadow');
         else winnerInfo.classList.add('second-player-shadow');
         winnerInfo.classList.add('winner-info-show');
-        this.delay(3000).then(() => winnerInfo.classList.remove('winner-info-show'));
+        this.delay(3000).then(() => {
+            winnerInfo.classList.remove('winner-info-show')
+            this.newRound();
+        }
+        );
     }
 
     delay(ms: number) {

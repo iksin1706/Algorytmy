@@ -125,13 +125,19 @@ body {
   margin-bottom: 30px;
 }
 
-.btn-start {
+.btn {
   width: 200px;
   height: 50px;
   background-color: purple;
   color: white;
   border: none;
   font-size: 24px;
+  transition: 0.5s;
+}
+.btn:hover {
+  transition: 0.2s;
+  cursor: pointer;
+  box-shadow: purple 0px 5px 30px;
 }
 
 .back-to-settings {
@@ -144,7 +150,7 @@ body {
   scale: 0.6;
 }
 .back-to-settings:hover {
-  scale: 0.9;
+  scale: 0.7;
   transition: 0.5s;
   -webkit-filter: drop-shadow(#ac03ac 0px 0px 50px);
   filter: drop-shadow(#ac03ac 0px 0px 20px);
