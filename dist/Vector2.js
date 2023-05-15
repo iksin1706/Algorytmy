@@ -1,2 +1,1 @@
-export class Vector2 {
-}
+export {};

@@ -15,7 +15,7 @@ export class Game {
         this.generateBoardView();
     }
 
-    move(v: Vector2) {
+    move(v: Vector2) : void {
         if (this.board.isLegalMove(v)) {
             this.boardElements[v.x][v.y].innerHTML = 'X';
             if (!this.board.isPlayerOneTurn) {
@@ -33,18 +33,18 @@ export class Game {
         }
     }
 
-    newGame(){
-        this.isPlayerOneStarting=this.gameSettings.isPlayerOneStarting;
+    newGame() : void {
+        this.isPlayerOneStarting = this.gameSettings.isPlayerOneStarting;
         this.clearBoard();
     }
 
-    newRound() {
+    newRound() : void {
         if (this.gameSettings.isAlternating) {
-            this.isPlayerOneStarting=!this.isPlayerOneStarting;
+            this.isPlayerOneStarting = !this.isPlayerOneStarting;
         }
         this.clearBoard()
     }
-    clearBoard(){
+    clearBoard() : void {
         this.board.isPlayerOneTurn = this.isPlayerOneStarting;
         this.board.clearBoard();
         for (let i = 0; i < this.size; i++) {
@@ -55,10 +55,12 @@ export class Game {
         }
         console.log(this.isPlayerOneStarting);
         console.log(this.board.isPlayerOneTurn);
-        if (this.gameSettings.isAiPlaying && !this.isPlayerOneStarting) this.move(Ai.findBestMove(this.board));
+        if (this.gameSettings.isAiPlaying && !this.isPlayerOneStarting) {
+            this.move(this.board.getRandomMove());
+        }
     }
 
-    generateBoardView() {
+    generateBoardView() : void {
         this.boardContainerElement.style.width = `${(this.board.size * 160)}px`;
         for (let i = 0; i < this.board.size; i++) {
             this.board[i] = [];
@@ -73,9 +75,9 @@ export class Game {
         }
     }
 
-    showWinner(isFirstPlayerWinner: boolean) {
+    showWinner(isFirstPlayerWinner: boolean) : void {
         const winnerInfo = document.querySelector('.winner-info');
-        winnerInfo.innerHTML = isFirstPlayerWinner ? 'First player won' : 'Second plyer won';
+        winnerInfo.innerHTML = isFirstPlayerWinner ? 'First player won' : 'Second player won';
         if (isFirstPlayerWinner) winnerInfo.classList.remove('second-player-shadow');
         else winnerInfo.classList.add('second-player-shadow');
         winnerInfo.classList.add('winner-info-show');
@@ -86,7 +88,7 @@ export class Game {
         );
     }
 
-    delay(ms: number) {
+    delay(ms: number) : Promise<any> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 }

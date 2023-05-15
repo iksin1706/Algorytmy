@@ -9,12 +9,12 @@ export class Board {
         this.createBoard(size);
     }
 
-    move(move: Vector2) {
+    move(move: Vector2) : void {
         this.board[move.x][move.y] = this.isPlayerOneTurn ? 1 : 2;
         this.isPlayerOneTurn = !this.isPlayerOneTurn;
     }
 
-    undoMove(move: Vector2) {
+    undoMove(move: Vector2) : void {
         this.board[move.x][move.y] = 0;
         this.isPlayerOneTurn = !this.isPlayerOneTurn;
     }
@@ -33,29 +33,41 @@ export class Board {
         return (this.board[move.x][move.y] === 0)
     }
 
+    getBoardState() : number{
+        if (this.isGameOver()) {
+            return this.size;
+        } else return 0
+
+    }
     isGameOver(): boolean {
-        let isFinished = true;
-
         for (let i = 0; i < this.size; i++) {
-
-            if (this.board[i].every(v => v !== 0)) {
+            if (this.board[i].every(v => v !== 0) || this.board.every((v) => v[i] !== 0)) {
                 return true;
             }
-            if (this.board.every((v: Array<number>) => v[i] !== 0)) {
-                return true;
-            }
-            if (this.board[i][i] === 0) isFinished = false;
         }
-        if (isFinished) return true;
-        isFinished = true;
+
+        let diag1 = true;
+        let diag2 = true;
         for (let i = 0; i < this.size; i++) {
-            if (this.board[this.size - i - 1][i] === 0) isFinished = false;
+            if (this.board[i][i] === 0) {
+                diag1 = false;
+            }
+            if (this.board[this.size - i - 1][i] === 0) {
+                diag2 = false;
+            }
         }
-        if (isFinished) return true;
-        else return false;
+
+        return diag1 || diag2;
     }
 
-    createBoard(size:number) {
+    getRandomMove() : Vector2 {
+        return {
+            x: Math.round(Math.random() * this.size),
+            y: Math.round(Math.random() * this.size)
+        }
+    }
+
+    createBoard(size: number) : void {
         this.board = new Array<number[]>(size)
             .fill([])
             .map(() =>
@@ -63,12 +75,12 @@ export class Board {
             );
     }
 
-    clearBoard(){
+    clearBoard() :void {
         this.board = new Array<number[]>(this.size)
-        .fill([])
-        .map(() =>
-            new Array<number>(this.size).fill(0)
-        );
+            .fill([])
+            .map(() =>
+                new Array<number>(this.size).fill(0)
+            );
     }
 
 

@@ -47,8 +47,9 @@ export class Game {
         }
         console.log(this.isPlayerOneStarting);
         console.log(this.board.isPlayerOneTurn);
-        if (this.gameSettings.isAiPlaying && !this.isPlayerOneStarting)
-            this.move(Ai.findBestMove(this.board));
+        if (this.gameSettings.isAiPlaying && !this.isPlayerOneStarting) {
+            this.move(this.board.getRandomMove());
+        }
     }
     generateBoardView() {
         this.boardContainerElement.style.width = `${(this.board.size * 160)}px`;
@@ -66,7 +67,7 @@ export class Game {
     }
     showWinner(isFirstPlayerWinner) {
         const winnerInfo = document.querySelector('.winner-info');
-        winnerInfo.innerHTML = isFirstPlayerWinner ? 'First player won' : 'Second plyer won';
+        winnerInfo.innerHTML = isFirstPlayerWinner ? 'First player won' : 'Second player won';
         if (isFirstPlayerWinner)
             winnerInfo.classList.remove('second-player-shadow');
         else

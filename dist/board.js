@@ -26,29 +26,36 @@ export class Board {
     isLegalMove(move) {
         return (this.board[move.x][move.y] === 0);
     }
-    isGameOver() {
-        let isFinished = true;
-        for (let i = 0; i < this.size; i++) {
-            if (this.board[i].every(v => v !== 0)) {
-                return true;
-            }
-            if (this.board.every((v) => v[i] !== 0)) {
-                return true;
-            }
-            if (this.board[i][i] === 0)
-                isFinished = false;
+    getBoardState() {
+        if (this.isGameOver()) {
+            return this.size;
         }
-        if (isFinished)
-            return true;
-        isFinished = true;
-        for (let i = 0; i < this.size; i++) {
-            if (this.board[this.size - i - 1][i] === 0)
-                isFinished = false;
-        }
-        if (isFinished)
-            return true;
         else
-            return false;
+            return 0;
+    }
+    isGameOver() {
+        for (let i = 0; i < this.size; i++) {
+            if (this.board[i].every(v => v !== 0) || this.board.every((v) => v[i] !== 0)) {
+                return true;
+            }
+        }
+        let diag1 = true;
+        let diag2 = true;
+        for (let i = 0; i < this.size; i++) {
+            if (this.board[i][i] === 0) {
+                diag1 = false;
+            }
+            if (this.board[this.size - i - 1][i] === 0) {
+                diag2 = false;
+            }
+        }
+        return diag1 || diag2;
+    }
+    getRandomMove() {
+        return {
+            x: Math.round(Math.random() * this.size),
+            y: Math.round(Math.random() * this.size)
+        };
     }
     createBoard(size) {
         this.board = new Array(size)

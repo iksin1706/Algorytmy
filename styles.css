@@ -171,5 +171,9 @@ body {
     opacity: 0;
   }
 }
+p {
+  font-size: 13px;
+  margin-top: 10px;
+}
 
 /*# sourceMappingURL=styles.css.map */
